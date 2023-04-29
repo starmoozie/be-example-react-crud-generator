@@ -9,6 +9,7 @@ class BaseModel extends Model
     use \Illuminate\Database\Eloquent\Factories\HasFactory;
     use Resources\BootMethodTrait;
     use Resources\SearchColumnLikeTrait;
+    use Resources\FilterScope;
 
     public static function getRelationship()
     {

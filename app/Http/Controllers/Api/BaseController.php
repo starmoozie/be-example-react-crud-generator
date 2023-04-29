@@ -32,7 +32,7 @@ class BaseController extends Controller
                 $filters && count($filters),
                 function ($query) use ($filters) {
                     foreach ($filters as $filter) {
-                        $query->where($filter->id, 'LIKE', "%{$filter->value}%");
+                        $query->filterAnyColumns($filter);
                     }
 
                     return $query;
