@@ -18,16 +18,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory()->create([
-        //     'name' => 'Starmoozie',
-        //     'email' => 'starmoozie@gmail.com',
-        //     'password' => \Hash::make('password')
-        // ]);
-        // User::factory(50)->create();
-        // Supplier::factory(50)->create();
-        // Customer::factory(50)->create();
-        // PaymentMethod::factory(50)->create();
-        // ProductCategory::factory(50000)->create();
+        User::factory()->create([
+            'name' => 'Starmoozie',
+            'email' => 'starmoozie@gmail.com',
+            'password' => \Hash::make('password')
+        ]);
+        User::factory(50)->create();
+        Supplier::factory(50)->create();
+        Customer::factory(50)->create();
+        PaymentMethod::factory(50)->create();
+        ProductCategory::factory(50000)->create();
         Product::factory(5000)->create();
     }
 }
