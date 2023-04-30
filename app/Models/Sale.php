@@ -58,4 +58,14 @@ class Sale extends BaseModel
     {
         return $this->pay_amount + $this->checkout_amount;
     }
+
+    public function getNettoAttribute($value)
+    {
+        return (int) $value;
+    }
+
+    public function getBruttoAttribute($value)
+    {
+        return (int) $value;
+    }
 }
