@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('netto')->nullable();
             $table->string('refund')->nullable();
             $table->string('unpaid')->nullable();
+            $table->boolean('refund_payabled')->default(false);
             $table->timestamps();
 
             $table->index(['created_at']);

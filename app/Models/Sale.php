@@ -16,7 +16,8 @@ class Sale extends BaseModel
         'brutto',
         'netto',
         'unpaid',
-        'refund'
+        'refund',
+        'refund_payabled'
     ];
     protected $casts = [
         'items' => 'array',

@@ -71,10 +71,24 @@ class BaseController extends Controller
     public function store()
     {
         $request = app($this->request);
-        $entry = $this->model->create($request->validated());
-        $entry->load($this->with);
+        $requestValidated = $request->validated();
 
-        return new $this->resource($entry);
+        // Identity bulk insert
+        if (count($requestValidated) === 1 && $request->items) {
+            foreach ($request->items as $item) {
+                $entry = $this->model->create($item);
+                $ids[] = $entry->id;
+            }
+
+            return new $this->collection(
+                $this->model->whereIn('id', $ids)->with($this->with)->get()
+            );
+        } else {
+            $entry = $this->model->create($requestValidated);
+            $entry->load($this->with);
+
+            return new $this->resource($entry);
+        }
     }
 
     /**

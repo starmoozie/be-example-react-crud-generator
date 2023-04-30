@@ -88,6 +88,7 @@ class ProductRequest extends BaseRequest
         $validated = parent::validated();
         unset($validated['productCategory']);
         unset($validated['supplier']);
+
         return array_merge($validated, [
             'supplier_id' => $this->supplier['id'],
             'buy_price'   => $this->buy_price,
