@@ -51,5 +51,7 @@ Route::group([
             'products' => ProductController::class,
             'sales' => SaleController::class,
         ]);
+
+        Route::get('products-in-stock', [ProductController::class, 'selectInStock']);
     });
 });

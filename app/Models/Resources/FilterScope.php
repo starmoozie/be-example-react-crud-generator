@@ -37,7 +37,7 @@ trait FilterScope
             ->when(
                 // Indicate if less or more than, from boolean value
                 $is_bool,
-                fn ($q) => $q->filterRefundOrUnpaid($filter)
+                fn ($q) => $q->filterBoolean($filter)
             );
     }
 }

@@ -10,7 +10,8 @@ class Product extends BaseModel
         'description',
         'buy_price',
         'supplier_id',
-        'product_category_id'
+        'product_category_id',
+        'is_sold'
     ];
 
     public function productCategory()
@@ -21,5 +22,18 @@ class Product extends BaseModel
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function scopeFilterBoolean($query, $filter)
+    {
+        $column = $filter->id;
+        $value = filter_var($filter->value, FILTER_VALIDATE_BOOLEAN);
+
+        return $query->where($column, $value);
+    }
+
+    public function scopeInStock($query)
+    {
+        return $query->where('is_sold', false);
     }
 }

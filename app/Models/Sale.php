@@ -37,7 +37,7 @@ class Sale extends BaseModel
         return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
     }
 
-    public function scopeFilterRefundOrUnpaid($query, $filter)
+    public function scopeFilterBoolean($query, $filter)
     {
         $column = $filter->id;
         $value = filter_var($filter->value, FILTER_VALIDATE_BOOLEAN);
