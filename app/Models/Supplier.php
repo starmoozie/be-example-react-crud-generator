@@ -8,4 +8,9 @@ class Supplier extends BaseModel
         'name',
         'phone'
     ];
+
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

@@ -8,4 +8,9 @@ class Customer extends BaseModel
         'name',
         'phone'
     ];
+
+    public function sale()
+    {
+        return $this->hasMany(Sale::class);
+    }
 }

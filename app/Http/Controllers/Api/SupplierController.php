@@ -15,6 +15,7 @@ class SupplierController extends BaseController
     protected $model;
     protected $fillable;
     protected $searchable_columns = ['name'];
+    protected $with = ['product'];
 
     public function __construct(Model $model)
     {
