@@ -8,8 +8,13 @@ class Permission extends BaseModel
 {
     protected $fillable = [
         'name',
-        'position'
+        'key',
+        'position',
+        'method',
+        'type'
     ];
+
+    public $increment = true;
 
     public function getPositionAttribute($value)
     {
@@ -19,5 +24,10 @@ class Permission extends BaseModel
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = \ucwords($value);
+    }
+
+    public function setKeyAttribute($value)
+    {
+        $this->attributes['key'] = \strtolower($value);
     }
 }

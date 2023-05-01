@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id'
     ];
 
     /**
@@ -33,6 +34,8 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    protected $with = ['role'];
 
     /**
      * The attributes that should be cast.
@@ -46,6 +49,11 @@ class User extends Authenticatable
     public function photos()
     {
         return $this->hasMany(UserPhoto::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 
     public static function getRelationship()

@@ -15,27 +15,45 @@ class PermissionSeeder extends Seeder
         $data = [
             [
                 'name' => 'Create',
-                'position' => 0
+                'key' => 'create',
+                'position' => 0,
+                'method' => 'post',
+                'type' => null,
             ],
             [
                 'name' => 'Export',
-                'position' => 1
+                'key' => 'export',
+                'position' => 1,
+                'method' => null,
+                'type' => null,
             ],
             [
                 'name' => 'Import',
-                'position' => 1
+                'key' => 'import',
+                'position' => 1,
+                'method' => null,
+                'type' => null,
             ],
             [
                 'name' => 'Detail',
-                'position' => 2
+                'key' => 'detail',
+                'position' => 2,
+                'method' => null,
+                'type' => 'Default',
             ],
             [
                 'name' => 'Edit',
-                'position' => 2
+                'key' => 'edit',
+                'position' => 2,
+                'method' => 'put',
+                'type' => 'Form',
             ],
             [
                 'name' => 'Delete',
-                'position' => 2
+                'key' => 'delete',
+                'position' => 2,
+                'method' => 'delete',
+                'type' => 'Confirm',
             ],
         ];
 

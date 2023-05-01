@@ -6,8 +6,12 @@ class Menu extends BaseModel
 {
     protected $fillable = [
         'name',
-        'path'
+        'path',
+        'permission'
     ];
+
+    protected $casts = ['permission' => 'array'];
+
     public $increment = true;
 
     public function setNameAttribute($value)
