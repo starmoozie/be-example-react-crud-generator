@@ -31,7 +31,7 @@ Route::group([
     Route::post('register', [AuthController::class, 'register'])->name('register');
 
     Route::group([
-        // 'middleware' => ['auth:api']
+        'middleware' => ['auth:api']
     ], function () {
 
         Route::group([

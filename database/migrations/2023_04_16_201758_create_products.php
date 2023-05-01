@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('buy_price', 15)->nullable();
             $table->uuid('product_category_id')->index()->nullable();
             $table->uuid('supplier_id')->index()->nullable();
+            $table->boolean('is_sold')->default(false);
             $table->timestamps();
 
             $table->index(['created_at']);

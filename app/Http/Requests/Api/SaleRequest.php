@@ -5,6 +5,7 @@ namespace App\Http\Requests\Api;
 use App\Models\Customer;
 use App\Models\PaymentMethod;
 use App\Models\Product;
+use App\Models\Sale;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 
@@ -26,20 +27,26 @@ class SaleRequest extends BaseRequest
                 Rule::exists(Customer::class, 'id')
             ],
             'receipt_number' => [
-                'required'
+                'required',
+                Rule::unique(Sale::class)->when($this->method() === "PUT", fn ($q) => $q->ignore($this->sale))
             ],
             'checkout_amount' => [
                 'required'
             ],
             'paymentMethod.id' => [
                 'nullable',
+                'sometimes',
                 Rule::exists(PaymentMethod::class, 'id')
             ],
             'pay_amount' => [
-                'required'
+                'nullable',
+                'sometimes',
+                'numeric'
             ],
-            'refund_amount' => [
-                'required'
+            'refund_payabled' => [
+                'nullable',
+                'sometimes',
+                'boolean'
             ],
             'items' => [
                 'required', 'array'
@@ -49,7 +56,9 @@ class SaleRequest extends BaseRequest
                 Rule::exists(Product::class, 'id')
             ],
             'items.*.sell_price' => [
-                'required'
+                'nullable',
+                'sometimes',
+                'numeric'
             ],
         ];
     }

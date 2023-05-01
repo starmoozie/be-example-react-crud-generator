@@ -6,6 +6,7 @@ use App\Http\Requests\Api\SaleRequest as Request;
 use App\Http\Resources\Sale\Collection;
 use App\Http\Resources\Sale\Resource;
 use App\Models\Sale as Model;
+use App\Models\Product;
 
 class SaleController extends BaseController
 {
@@ -24,64 +25,65 @@ class SaleController extends BaseController
     }
 
     /**
-     * Display a listing of the resource.
+     * Store a newly created resource in storage.
      */
-    public function index()
+    public function store()
     {
-        $filters = json_decode(request()->filters);
-        $sortBy  = json_decode(request()->sort);
+        $request = app($this->request);
+        $requestValidated = $request->validated();
 
-        $entries = $this->model->SearchColumnLike(
-            $this->searchable_columns,
-            request()->search
-        )
-            ->when(
-                $filters && count($filters),
-                function ($query) use ($filters) {
-                    foreach ($filters as $filter) {
-                        switch ($filter->id) {
+        foreach ($request->items as $key => $value) {
+            return $value;
+        }
 
-                                // case 'unpaid':
-                                //     $query->filterRefundOrUnpaid($filter);
-                                //     break;
+        $entry = $this->model->create($requestValidated);
+        $entry->load($this->with);
 
-                                // case 'refund':
-                                //     $query->filterRefundOrUnpaid($filter);
-                                //     break;
+        return new $this->resource($entry);
+    }
 
-                            default:
-                                $query->filterAnyColumns($filter, $this->with);
-                                break;
-                        }
-                    }
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(string $id)
+    {
+        $entry = $this->model->findOrFail($id);
 
-                    return $query;
-                }
-            )
-            ->when(
-                $sortBy && count($sortBy),
-                function ($query) use ($sortBy) {
-                    foreach ($sortBy as $sort) {
-                        $relationship = in_array($sort->id, $this->model->getRelationship());
-                        $appends      = in_array($sort->id, $this->model->getAppends());
+        $request = app($this->request);
 
-                        if ($relationship) {
-                            $model_name    = \ucwords($sort->id);
-                            $related_model = "\\App\\Models\\{$model_name}";
-                            $model         = new $related_model();
-                            $column        = $model->select(['name'])->whereColumn("{$this->model->getTable()}.{$sort->id}_id", "{$sort->id}s.id")->take(1);
-                            $query->orderBy($column, $sort->desc ? 'desc' : 'asc');
-                        } elseif (!$relationship && !$appends) {
-                            $column = $sort->id;
-                            $query->orderBy($column, $sort->desc ? 'desc' : 'asc');
-                        }
-                    }
-                },
-                fn ($query) => $query->orderBy($this->searchable_columns[0], 'asc')
-            )
-            ->with($this->with)
-            ->paginate(request()->per_page ?? config('base.pagination'));
+        $this->handleOldNewItems($request, $entry);
 
-        return new $this->collection($entries);
+        $entry->update($request->validated());
+        $entry->load($this->with);
+
+        return new $this->resource($entry);
+    }
+
+    /**
+     * Handle old/new items is_sold or unsold
+     */
+    private function handleOldNewItems($request, $entry): void
+    {
+        $old_items = collect($entry->items)->pluck('product.id')->toArray();
+        $new_items = collect($request->items)->pluck('product.id')->toArray();
+        $diffs     = array_merge(array_diff($old_items, $new_items), array_diff($new_items, $old_items));
+
+        foreach ($diffs as $diff) {
+            if (\in_array($diff, $old_items)) {
+                $unsoldIds[] = $diff;
+            }
+
+            if (\in_array($diff, $new_items)) {
+                $soldIds[] = $diff;
+            }
+        }
+
+        if (isset($unsoldIds)) {
+            Product::whereIn('id', $unsoldIds)->update(['is_sold' => false]);
+        }
+
+        if (isset($soldIds)) {
+            Product::whereIn('id', $soldIds)->update(['is_sold' => true]);
+        }
     }
 }
