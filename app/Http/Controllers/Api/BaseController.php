@@ -42,17 +42,23 @@ class BaseController extends Controller
                 $sortBy && count($sortBy),
                 function ($query) use ($sortBy) {
                     foreach ($sortBy as $sort) {
-                        $relationship = in_array($sort->id, $this->model->getRelationship());
-                        $appends      = in_array($sort->id, $this->model->getAppends());
+                        $split = explode('.', $sort->id);
+                        $name = $split[0];
+                        $relationship = in_array($name, $this->model->getRelationship());
+                        $appends      = in_array($name, $this->model->getAppends());
 
                         if ($relationship) {
-                            $model_name    = \ucwords($sort->id);
+                            $model_name    = \ucwords($name);
                             $related_model = "\\App\\Models\\{$model_name}";
                             $model         = new $related_model();
-                            $column        = $model->select(['name'])->whereColumn("{$this->model->getTable()}.{$sort->id}_id", "{$sort->id}s.id")->take(1);
-                            $query->orderBy($column, $sort->desc ? 'desc' : 'asc');
+
+                            $fk           = \Str::snake($name);
+                            $related_table = \Str::plural($fk);
+
+                            $query        = $model->select(['name'])->whereColumn("{$this->model->getTable()}.{$fk}_id", "{$related_table}.id")->take(1);
+                            $query->orderBy($name[1], $sort->desc ? 'desc' : 'asc');
                         } elseif (!$relationship && !$appends) {
-                            $column = $sort->id;
+                            $column = $name;
                             $query->orderBy($column, $sort->desc ? 'desc' : 'asc');
                         }
                     }

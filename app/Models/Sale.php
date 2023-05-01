@@ -27,6 +27,13 @@ class Sale extends BaseModel
         'alreadyPaid',
     ];
 
+    protected $with = ['customer'];
+
+    public static function getRelationship()
+    {
+        return (new Self)->with;
+    }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);

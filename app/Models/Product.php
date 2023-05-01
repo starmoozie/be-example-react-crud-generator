@@ -14,6 +14,13 @@ class Product extends BaseModel
         'is_sold'
     ];
 
+    protected $with = ['productCategory', 'supplier'];
+
+    public static function getRelationship()
+    {
+        return (new Self)->with;
+    }
+
     public function productCategory()
     {
         return $this->belongsTo(ProductCategory::class, 'product_category_id');
