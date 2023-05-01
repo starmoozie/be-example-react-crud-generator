@@ -13,7 +13,7 @@ trait BootMethodTrait
 
         // Call Before Creating or Updating Record.
         static::saving(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
+            if (empty($model->{$model->getKeyName()}) && !$model->increment) {
                 // Generate Primary Key
                 $model->{$model->getKeyName()} = \Str::uuid()->toString();
             }
