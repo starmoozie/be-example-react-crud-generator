@@ -19,12 +19,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(50)->create();
-        // Supplier::factory(50)->create();
-        // Customer::factory(50)->create();
-        // PaymentMethod::factory(50)->create();
-        // ProductCategory::factory(50000)->create();
-        // Product::factory(5000)->create();
+        User::factory(100)->create();
+        Supplier::factory(100)->create();
+        Customer::factory(100)->create();
+        PaymentMethod::factory(100)->create();
+        ProductCategory::factory(100)->create();
+        Product::factory(100)->create();
 
         $this->call([
             PermissionSeeder::class,
