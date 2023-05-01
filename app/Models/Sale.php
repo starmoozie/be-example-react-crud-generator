@@ -44,8 +44,8 @@ class Sale extends BaseModel
 
         return $query->when(
             $value,
-            fn ($q) => $q->where($column, '>', 0),
-            fn ($q) => $q->where($column, '<=', 0)
+            fn ($q) => $q->where(fn ($q) => $q->where($column, '>', 0)->where('refund_payabled', false)),
+            fn ($q) => $q->where(fn ($q) => $q->where($column, '<=', 0)->orWhere('refund_payabled', true))
         );
     }
 
