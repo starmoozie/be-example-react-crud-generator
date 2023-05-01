@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         Customer::factory(100)->create();
         PaymentMethod::factory(100)->create();
         ProductCategory::factory(100)->create();
-        Product::factory(100)->create();
+        Product::factory(25)->create();
 
         $this->call([
             PermissionSeeder::class,

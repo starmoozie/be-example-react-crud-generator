@@ -32,9 +32,10 @@ class SaleController extends BaseController
         $request = app($this->request);
         $requestValidated = $request->validated();
 
-        foreach ($request->items as $key => $value) {
-            return $value;
-        }
+        $this->updateProductStatus(
+            collect($request->items)->pluck('product.id')->toArray(),
+            true
+        );
 
         $entry = $this->model->create($requestValidated);
         $entry->load($this->with);
@@ -79,11 +80,19 @@ class SaleController extends BaseController
         }
 
         if (isset($unsoldIds)) {
-            Product::whereIn('id', $unsoldIds)->update(['is_sold' => false]);
+            $this->updateProductStatus($unsoldIds, false);
         }
 
         if (isset($soldIds)) {
-            Product::whereIn('id', $soldIds)->update(['is_sold' => true]);
+            $this->updateProductStatus($soldIds, true);
         }
+    }
+
+    /**
+     * Update Product status
+     */
+    protected function updateProductStatus($ids, $status): void
+    {
+        Product::whereIn('id', $ids)->update(['is_sold' => $status]);
     }
 }

@@ -18,8 +18,9 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+        $random = $this->faker->numberBetween(1, 3);
         return [
-            'name' => $this->faker->word(),
+            'name' => $this->faker->words($random, true),
             'product_category_id' => ProductCategory::inRandomOrder()->first()->id,
             'supplier_id' => Supplier::inRandomOrder()->first()->id,
             'buy_price' => fake()->numberBetween(10000, 100000)
