@@ -15,9 +15,7 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $payload = $request->only(['email', 'password']);
-
-        return $this->forceLogin($payload);
+        return $this->forceLogin($request);
     }
 
     public function register(RegisterRequest $request)
@@ -28,13 +26,13 @@ class AuthController extends Controller
 
         $request->merge(['password' => $request->password_confirmation]);
 
-        $payload = $request->only(['email', 'password']);
-
-        return $this->forceLogin($payload);
+        return $this->forceLogin($request);
     }
 
-    public function forceLogin($payload)
+    public function forceLogin($request)
     {
+        $payload = $request->only(['email', 'password']);
+
         // Check auth login
         if (!\Auth::validate($payload)) {
             return $this->fails(__('auth.failed'), HttpCode::UNPROCESSABLE_ENTITY);
