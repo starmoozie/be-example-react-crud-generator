@@ -17,6 +17,24 @@ class AuthController extends Controller
     {
         $payload = $request->only(['email', 'password']);
 
+        return new UserResource($this->forceLogin($payload));
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        User::create(
+            $request->only((new User)->getFillable())
+        );
+
+        $request->merge(['password' => $request->password_confirmation]);
+
+        $payload = $request->only(['email', 'password']);
+
+        return new UserResource($this->forceLogin($payload));
+    }
+
+    public function forceLogin($payload)
+    {
         // Check auth login
         if (!\Auth::validate($payload)) {
             return $this->fails(__('auth.failed'), HttpCode::UNPROCESSABLE_ENTITY);
@@ -31,15 +49,6 @@ class AuthController extends Controller
         // Create new token
         $entry->token = $entry->createToken('token')->accessToken;
 
-        return new UserResource($entry);
-    }
-
-    public function register(RegisterRequest $request)
-    {
-        User::create(
-            $request->only((new User)->getFillable())
-        );
-
-        return $this->success(null, null, HttpCode::SUCCESS);
+        return $entry;
     }
 }
