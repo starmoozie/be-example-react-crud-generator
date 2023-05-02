@@ -17,7 +17,7 @@ class AuthController extends Controller
     {
         $payload = $request->only(['email', 'password']);
 
-        return new UserResource($this->forceLogin($payload));
+        return $this->forceLogin($payload);
     }
 
     public function register(RegisterRequest $request)
@@ -30,7 +30,7 @@ class AuthController extends Controller
 
         $payload = $request->only(['email', 'password']);
 
-        return new UserResource($this->forceLogin($payload));
+        return $this->forceLogin($payload);
     }
 
     public function forceLogin($payload)
@@ -49,6 +49,6 @@ class AuthController extends Controller
         // Create new token
         $entry->token = $entry->createToken('token')->accessToken;
 
-        return $entry;
+        return new UserResource($this->forceLogin($entry));
     }
 }
