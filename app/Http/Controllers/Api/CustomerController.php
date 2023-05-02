@@ -15,6 +15,7 @@ class CustomerController extends BaseController
     protected $model;
     protected $fillable;
     protected $searchable_columns = ['name'];
+    protected $with = ['sale'];
 
     public function __construct(Model $model)
     {

@@ -57,7 +57,7 @@ class BaseCollection extends ResourceCollection
                 ];
             } else {
                 if (($value instanceof \Illuminate\Support\Collection && !$value->isEmpty()) || (!$value instanceof \Illuminate\Support\Collection && $value)) {
-                    $attribute = $value && implode('.', $value->getFillable());
+                    $attribute = $value && implode('.', $value->first()->getFillable());
                     $data[] = [
                         "name" => $key,
                         "key"  => "{$key}.{$attribute}"

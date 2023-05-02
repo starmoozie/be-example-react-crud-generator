@@ -15,6 +15,22 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
+        return $this->forceLogin($request);
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        User::create(
+            $request->only((new User)->getFillable())
+        );
+
+        $request->merge(['password' => $request->password_confirmation]);
+
+        return $this->forceLogin($request);
+    }
+
+    public function forceLogin($request)
+    {
         $payload = $request->only(['email', 'password']);
 
         // Check auth login
@@ -32,14 +48,5 @@ class AuthController extends Controller
         $entry->token = $entry->createToken('token')->accessToken;
 
         return new UserResource($entry);
-    }
-
-    public function register(RegisterRequest $request)
-    {
-        User::create(
-            $request->only((new User)->getFillable())
-        );
-
-        return $this->success(null, null, HttpCode::SUCCESS);
     }
 }

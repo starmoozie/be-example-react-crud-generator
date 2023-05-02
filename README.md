@@ -7,4 +7,4 @@ Build by Laravel
 -   `cp .env.example .env`
 -   Sesuaikan koneksi database. Silahkan merujuk ke dokumentasi [Laravel](https://laravel.com/docs/10.x/database)
 -   `php artisan migrate --seed`
--   `php artisan passport:install`. Jika mengaktifkan authentikasi dengan passport. Bisa uncomment middleware pada `route/api`
+-   `php artisan passport:client --personal`

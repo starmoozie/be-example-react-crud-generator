@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 class BaseResource extends JsonResource
 {
-    const LOGIN_ROUTE = 'login';
+    const AUTH_ROUTE = ['login', 'register'];
 
     /**
      * Transform the resource into an array.
@@ -39,7 +39,7 @@ class BaseResource extends JsonResource
         $available_properties = array_diff($all_properties, $this->getHidden());
 
         // Identity is login route, then add token attribute
-        if ($request->route()->getName() === Self::LOGIN_ROUTE) {
+        if (\in_array($request->route()->getName(), Self::AUTH_ROUTE)) {
             $available_properties = [...$available_properties, ...['token']];
         }
 
