@@ -24,10 +24,11 @@ class BaseController extends Controller
     {
         $filters = json_decode(request()->filters);
         $sortBy  = json_decode(request()->sort);
-        $entries = $this->model->SearchColumnLike(
-            $this->searchable_columns,
-            request()->search
-        )
+        $entries = $this->model
+            ->SearchColumnLike(
+                $this->searchable_columns,
+                request()->search
+            )
             ->when(
                 $filters && count($filters),
                 function ($query) use ($filters) {
@@ -55,8 +56,10 @@ class BaseController extends Controller
                             $fk           = \Str::snake($name);
                             $related_table = \Str::plural($fk);
 
-                            $query        = $model->select(['name'])->whereColumn("{$this->model->getTable()}.{$fk}_id", "{$related_table}.id")->take(1);
-                            $query->orderBy($name[1], $sort->desc ? 'desc' : 'asc');
+                            $query->orderBy(
+                                $model->select($split[1])->whereColumn("{$this->model->getTable()}.{$fk}_id", "{$related_table}.id"),
+                                $sort->desc ? 'desc' : 'asc'
+                            );
                         } elseif (!$relationship && !$appends) {
                             $column = $name;
                             $query->orderBy($column, $sort->desc ? 'desc' : 'asc');
