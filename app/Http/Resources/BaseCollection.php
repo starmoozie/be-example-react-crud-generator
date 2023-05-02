@@ -31,7 +31,7 @@ class BaseCollection extends ResourceCollection
 
         return [
             'success' => true,
-            'message' => __("message.success_{$request->method()}", ['menu' => str_replace('-', '', $request->segment(3))]),
+            'message' => __("message.success_{$request->method()}", ['menu' => \ucfirst(str_replace('-', ' ', \Str::singular($request->segment(3))))]),
             'columns' => $resource ? $this->handleProperties($resource, $request) : []
         ];
     }

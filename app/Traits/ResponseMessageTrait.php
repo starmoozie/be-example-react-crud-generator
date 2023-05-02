@@ -23,7 +23,7 @@ trait ResponseMessageTrait
 
         return response()->json([
             'success' => true,
-            'message' => $message ?: __("message.success_{$request->method()}", ['menu' => str_replace('-', ' ', $request->segment(3))]),
+            'message' => $message ?: __("message.success_{$request->method()}", ['menu' => \ucwords(str_replace('-', ' ', \Str::singular($request->segment(3))))]),
             'data'    => $data
         ], $httpCode);
     }
@@ -41,7 +41,7 @@ trait ResponseMessageTrait
 
         return response()->json([
             'success' => false,
-            'message' => $message ?: __("message.fails_{$request->method()}", ['menu' => str_replace('-', ' ', $request->segment(3))]),
+            'message' => $message ?: __("message.fails_{$request->method()}", ['menu' => \ucwords(str_replace('-', ' ', \Str::singular($request->segment(3))))]),
             'data'    => null
         ], $httpCode);
     }
