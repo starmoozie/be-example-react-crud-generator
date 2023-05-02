@@ -17,6 +17,8 @@ return new class extends Migration
             $table->boolean('active')->default(false);
             $table->longText('location');
             $table->timestamps();
+
+            $table->index(['created_at', 'active']);
         });
     }
 

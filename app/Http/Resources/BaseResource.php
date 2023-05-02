@@ -76,7 +76,7 @@ class BaseResource extends JsonResource
     {
         return [
             'success' => true,
-            'message' => __("message.success_{$request->method()}", ['menu' => str_replace('-', '', $request->segment(3))]),
+            'message' => __("message.success_{$request->method()}", ['menu' => \ucwords(str_replace('-', ' ', \Str::singular($request->segment(3))))]),
         ];
     }
 }

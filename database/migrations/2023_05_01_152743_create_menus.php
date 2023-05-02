@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('path', 50);
             $table->json('permission')->nullable();
             $table->timestamps();
+
+            $table->index(['created_at']);
         });
     }
 

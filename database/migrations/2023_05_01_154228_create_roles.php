@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name', 50)->unique();
             $table->json('menu');
             $table->timestamps();
+
+            $table->index(['created_at']);
         });
     }
 

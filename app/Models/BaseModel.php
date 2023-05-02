@@ -10,6 +10,7 @@ class BaseModel extends Model
     use Resources\BootMethodTrait;
     use Resources\SearchColumnLikeTrait;
     use Resources\FilterScope;
+    use Resources\ActivitylogTrait;
 
     public static function getRelationship()
     {

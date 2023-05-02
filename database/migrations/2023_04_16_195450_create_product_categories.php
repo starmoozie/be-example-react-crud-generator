@@ -15,6 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name', 50);
             $table->timestamps();
+
+            $table->index(['created_at']);
         });
     }
 
