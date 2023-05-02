@@ -19,6 +19,8 @@ return new class extends Migration
             $table->enum('type', ['Form', 'Default', 'Confirm'])->nullable();
             $table->smallInteger('position')->comment('0 => top-left, 1=> top-right, 2 => line');
             $table->timestamps();
+
+            $table->index(['created_at']);
         });
     }
 
