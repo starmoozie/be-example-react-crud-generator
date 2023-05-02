@@ -49,6 +49,6 @@ class AuthController extends Controller
         // Create new token
         $entry->token = $entry->createToken('token')->accessToken;
 
-        return new UserResource($this->forceLogin($entry));
+        return new UserResource($entry);
     }
 }
