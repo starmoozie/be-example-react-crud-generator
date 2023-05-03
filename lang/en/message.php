@@ -10,4 +10,6 @@ return [
     'fails_POST' => 'Failed to store :menu',
     'fails_PUT' => 'Failed to update :menu',
     'fails_DELETE' => 'Failed to delete :menu',
+
+    'page_not_found' => 'Route not found',
 ];
