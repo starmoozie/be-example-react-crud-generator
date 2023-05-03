@@ -8,3 +8,8 @@ Build by Laravel
 -   Sesuaikan koneksi database. Silahkan merujuk ke dokumentasi [Laravel](https://laravel.com/docs/10.x/database)
 -   `php artisan migrate --seed`
 -   `php artisan passport:client --personal`
+
+### Authentication (If you already seed)
+
+-   email `starmoozie@gmail.com`
+-   password `passowrd`
