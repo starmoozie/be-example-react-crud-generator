@@ -3,10 +3,13 @@
 namespace App\Models\Resources;
 
 /**
- * 
+ * Search any columns like (Not relationship)
  */
 trait SearchColumnLikeTrait
 {
+    /**
+     * Handle search any columns like (Not relationship)
+     */
     public function scopeSearchColumnLike($query, $columns, $search)
     {
         return $query->when($search, fn ($query) => $query->where(function ($query) use ($columns, $search) {

@@ -4,6 +4,12 @@ namespace App\Models;
 
 class Sale extends BaseModel
 {
+    /*
+    |--------------------------------------------------------------------------
+    | INSTANCES
+    |--------------------------------------------------------------------------
+    */
+
     protected $fillable = [
         'date',
         'customer_id',
@@ -27,12 +33,17 @@ class Sale extends BaseModel
         'alreadyPaid',
     ];
 
-    protected $with = ['customer'];
+    /*
+    |--------------------------------------------------------------------------
+    | FUNCTIONS
+    |--------------------------------------------------------------------------
+    */
 
-    public static function getRelationship()
-    {
-        return (new Self)->with;
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
 
     public function customer()
     {
@@ -43,6 +54,12 @@ class Sale extends BaseModel
     {
         return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPES
+    |--------------------------------------------------------------------------
+    */
 
     public function scopeFilterBoolean($query, $filter)
     {
@@ -55,6 +72,12 @@ class Sale extends BaseModel
             fn ($q) => $q->where(fn ($q) => $q->where($column, '<=', 0)->orWhere('refund_payabled', true))
         );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSORS
+    |--------------------------------------------------------------------------
+    */
 
     public function getTotalAmountAttribute()
     {
@@ -75,4 +98,10 @@ class Sale extends BaseModel
     {
         return (int) $value;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | MUTATORS
+    |--------------------------------------------------------------------------
+    */
 }

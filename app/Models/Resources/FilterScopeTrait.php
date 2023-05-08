@@ -5,10 +5,13 @@ namespace App\Models\Resources;
 use App\Constants\Inc;
 
 /**
- * 
+ * Filter any columns in model
  */
-trait FilterScope
+trait FilterScopeTrait
 {
+    /**
+     * Handle filter any columns
+     */
     public function scopeFilterAnyColumns($query, $filter)
     {
         $contains_dot = \str_contains($filter->id, ".");

@@ -24,50 +24,9 @@ class BaseController extends Controller
     {
         $filters = json_decode(request()->filters);
         $sortBy  = json_decode(request()->sort);
+
         $entries = $this->model
-            ->SearchColumnLike(
-                $this->searchable_columns,
-                request()->search
-            )
-            ->when(
-                $filters && count($filters),
-                function ($query) use ($filters) {
-                    foreach ($filters as $filter) {
-                        $query->filterAnyColumns($filter);
-                    }
-
-                    return $query;
-                }
-            )
-            ->when(
-                $sortBy && count($sortBy),
-                function ($query) use ($sortBy) {
-                    foreach ($sortBy as $sort) {
-                        $split = explode('.', $sort->id);
-                        $name = $split[0];
-                        $relationship = in_array($name, $this->model->getRelationship());
-                        $appends      = in_array($name, $this->model->getAppends());
-
-                        if ($relationship) {
-                            $model_name    = \ucwords($name);
-                            $related_model = "\\App\\Models\\{$model_name}";
-                            $model         = new $related_model();
-
-                            $fk           = \Str::snake($name);
-                            $related_table = \Str::plural($fk);
-
-                            $query->orderBy(
-                                $model->select($split[1])->whereColumn("{$this->model->getTable()}.{$fk}_id", "{$related_table}.id"),
-                                $sort->desc ? 'desc' : 'asc'
-                            );
-                        } elseif (!$relationship && !$appends) {
-                            $column = $name;
-                            $query->orderBy($column, $sort->desc ? 'desc' : 'asc');
-                        }
-                    }
-                },
-                fn ($query) => $query->orderBy($this->searchable_columns[0], 'asc')
-            )
+            ->tableActivity($filters, $sortBy, $this->searchable_columns)
             ->with($this->with)
             ->paginate(request()->per_page ?? config('base.pagination'));
 
@@ -84,19 +43,9 @@ class BaseController extends Controller
 
         // Identity bulk insert
         if (count($requestValidated) === 1 && $request->items) {
-            foreach ($request->items as $item) {
-                $entry = $this->model->create($item);
-                $ids[] = $entry->id;
-            }
-
-            return new $this->collection(
-                $this->model->whereIn('id', $ids)->with($this->with)->get()
-            );
+            return $this->bulkInsert($request->items);
         } else {
-            $entry = $this->model->create($requestValidated);
-            $entry->load($this->with);
-
-            return new $this->resource($entry);
+            return $this->singleInsert($requestValidated);
         }
     }
 
@@ -135,5 +84,31 @@ class BaseController extends Controller
         $this->model->whereIn('id', json_decode($ids, true))->delete();
 
         return $this->success($ids, null, HttpCode::SUCCESS);
+    }
+
+    /**
+     * Handle bulk insert operation
+     */
+    protected function bulkInsert($items)
+    {
+        foreach ($items as $item) {
+            $entry = $this->model->create($item);
+            $ids[] = $entry->id;
+        }
+
+        return new $this->collection(
+            $this->model->whereIn('id', $ids)->with($this->with)->get()
+        );
+    }
+
+    /**
+     * Handle single insert operation
+     */
+    protected function singleInsert($requestValidated)
+    {
+        $entry = $this->model->create($requestValidated);
+        $entry->load($this->with);
+
+        return new $this->resource($entry);
     }
 }

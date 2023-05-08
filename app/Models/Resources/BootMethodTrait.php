@@ -2,6 +2,9 @@
 
 namespace App\Models\Resources;
 
+/**
+ * Handle boot method like create uuid and code generator
+ */
 trait BootMethodTrait
 {
     /**

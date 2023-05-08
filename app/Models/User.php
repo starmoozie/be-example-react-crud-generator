@@ -13,6 +13,12 @@ class User extends Authenticatable
     use Resources\SearchColumnLikeTrait;
     use Resources\BootMethodTrait;
 
+    /*
+    |--------------------------------------------------------------------------
+    | INSTANCES
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * The attributes that are mass assignable.
      *
@@ -46,15 +52,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function photos()
-    {
-        return $this->hasMany(UserPhoto::class);
-    }
-
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | FUNCTIONS
+    |--------------------------------------------------------------------------
+    */
 
     public static function getRelationship()
     {
@@ -70,4 +72,38 @@ class User extends Authenticatable
     {
         return $this->fillable;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
+
+    public function photos()
+    {
+        return $this->hasMany(UserPhoto::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPES
+    |--------------------------------------------------------------------------
+    */
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSORS
+    |--------------------------------------------------------------------------
+    */
+
+    /*
+    |--------------------------------------------------------------------------
+    | MUTATORS
+    |--------------------------------------------------------------------------
+    */
 }
